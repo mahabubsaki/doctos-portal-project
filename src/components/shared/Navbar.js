@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import CustomLink from '../utilities/CustomLink';
 
 const Navbar = () => {
-    const handleTheme = () => {
-        const current = document.getElementsByTagName('html')[0].getAttribute('data-theme')
-        if (current === "light") {
-            document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark')
-        }
-        else {
-            document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
-        }
-    }
+    // const handleTheme = () => {
+    //     const current = document.getElementsByTagName('html')[0].getAttribute('data-theme')
+    //     if (current === "light") {
+    //         document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark')
+    //     }
+    //     else {
+    //         document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
+    //     }
+    // }
     return (
         <div className="navbar bg-base-100">
             <div className="navbar-start">

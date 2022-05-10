@@ -10,7 +10,6 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import NotFound from './components/pages/NotFound';
 import Footer from './components/shared/Footer';
-import { useEffect } from 'react';
 
 function App() {
   return (
