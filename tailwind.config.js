@@ -3,22 +3,14 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
-  },
-  projectTheme: {
-    themes: [
-      {
-        mytheme: {
-          primary: "#0FCFEC",
-          secondary: "#19D3AE",
-          accent: "#3A4256",
-          neutral: "#3d4451",
-          "base-100": "#ffffff",
-        },
+    extend: {
+      colors: {
+        projectPrimary: "#0FCFEC",
+        projectSecondary: "#19D3AE",
+        projectAccent: "#3A4256",
+        projectNeutral: "#3d4451",
       },
-      "dark",
-      "cupcake",
-    ],
+    },
   },
   plugins: [require("daisyui")],
 }
