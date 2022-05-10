@@ -63,3 +63,14 @@ input:checked + .slider:before {
 .banner {
   background-image: url(./assets/images/bg.png);
 }
+.home-appointment {
+  background-image: url(./assets/images/appointment.png);
+}
+.home-appointment-img {
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 80rem /* 1280px */;
+  gap: 1rem;
+}
