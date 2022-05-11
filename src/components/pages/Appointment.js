@@ -1,16 +1,14 @@
-import React from 'react';
-import chair from '../../assets/images/chair.png'
+import React, { useEffect, useState } from 'react';
+import AvailableAppointment from '../child/AvailableAppointment';
+import CalenderBanner from '../child/CalenderBanner';
 
 const Appointment = () => {
+    const [date, setDate] = useState(new Date())
     return (
-        <div className="hero min-h-screen banner">
-            <div className="hero-content flex-col md:flex-row-reverse">
-                <img src={chair} alt="chair" className="sm:max-w-md max-w-xs rounded-lg shadow-2xl" />
-                <div>
-
-                </div>
-            </div>
-        </div>
+        <>
+            <CalenderBanner date={date} setDate={setDate}></CalenderBanner>
+            <AvailableAppointment date={date}></AvailableAppointment>
+        </>
     );
 };
 
