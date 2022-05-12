@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import Service from './Service';
+import BookingModal from './BookingModal';
 
 const AvailableAppointment = ({ date }) => {
     const [services, setServices] = useState([])
+    const [treatment, setTreatment] = useState(null)
     useEffect(() => {
         const getServices = async () => {
             const { data } = await axios.get('http://localhost:5000/services')
@@ -20,9 +22,11 @@ const AvailableAppointment = ({ date }) => {
                     services.map(service => <Service
                         key={service._id}
                         service={service}
+                        setTreatment={setTreatment}
                     ></Service>)
                 }
             </div>
+            {treatment && <BookingModal treatment={treatment}></BookingModal>}
         </div>
     );
 };
