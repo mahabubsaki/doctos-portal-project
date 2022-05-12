@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AvailableAppointment from '../child/AvailableAppointment';
 import CalenderBanner from '../child/CalenderBanner';
 

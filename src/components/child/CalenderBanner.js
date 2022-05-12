@@ -8,7 +8,7 @@ const CalenderBanner = ({ date, setDate }) => {
         <div className="hero min-h-screen banner">
             <div className="hero-content flex-col md:flex-row-reverse">
                 <img src={chair} alt="chair" className="sm:max-w-md max-w-xs rounded-lg shadow-2xl" />
-                <div>
+                <div className="testimonial-card">
                     <DayPicker
                         dateFormat="MM-DD-YYYY"
                         mode="single"
