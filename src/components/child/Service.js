@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { toast } from 'react-toastify';
+import { ToastContext } from '../../App';
 
 const Service = ({ service, setTreatment, date }) => {
+    const { toastConfig } = useContext(ToastContext)
     const { name, slots } = service;
     const handleAppointment = (service) => {
         if (!date) {
-            toast.warn('Please select an date for appointment', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            toast.warn('Please select an date for appointment', toastConfig);
             return;
         }
         setTreatment(service)
