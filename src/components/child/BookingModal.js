@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
     const handleModalInput = (e) => {
@@ -11,6 +12,10 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
             phone: e.target.phone.value,
             email: e.target.email.value
         }
+        // const saveBooking = async () => {
+        //     const { data } = await axios.post('')
+        // }
+        // saveBooking()
         setTreatment(null)
     }
     return (
