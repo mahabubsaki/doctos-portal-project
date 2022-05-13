@@ -1,8 +1,13 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link } from 'react-router-dom';
+import auth from '../../firebase.init';
 import CustomLink from '../utilities/CustomLink';
+import Loading from '../utilities/Loading';
 
 const Navbar = () => {
+    const [user, loading] = useAuthState(auth);
     // const handleTheme = () => {
     //     const current = document.getElementsByTagName('html')[0].getAttribute('data-theme')
     //     if (current === "light") {
@@ -12,6 +17,9 @@ const Navbar = () => {
     //         document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
     //     }
     // }
+    if (loading) {
+        return <Loading></Loading>
+    }
     return (
         <div className="navbar bg-base-100">
             <div className="navbar-start">
@@ -50,8 +58,18 @@ const Navbar = () => {
                     <li><CustomLink to="/appointment">Appointment</CustomLink></li>
                     <li><CustomLink to="/reviews">Reviews</CustomLink></li>
                     <li><CustomLink to="/contact">Contact Us</CustomLink></li>
-                    <li><CustomLink to="/login">Login</CustomLink></li>
-                    <li><CustomLink to="/register">Sign Up</CustomLink></li>
+                    {
+                        !user ?
+                            <>
+                                <li><CustomLink to="/login">Login</CustomLink></li>
+                                <li><CustomLink to="/register">Sign Up</CustomLink></li>
+                            </>
+                            :
+                            <>
+                                <li><CustomLink to="/bookings">My Bookings</CustomLink></li>
+                                <button className="btn btn-error" onClick={() => signOut(auth)}>Sign Out</button>
+                            </>
+                    }
                 </ul>
             </div>
         </div>
