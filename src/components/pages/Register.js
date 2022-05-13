@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import ResetPasswordModal from '../child/ResetPasswordModal';
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import Loading from '../utilities/Loading';
 import { useForm } from "react-hook-form";
 import * as Yup from 'yup'
@@ -41,6 +41,8 @@ const Register = () => {
     }
 
 
+    const navigate = useNavigate()
+    const [initialUser, initialLoading] = useAuthState(auth);
     const [updateProfile] = useUpdateProfile(auth);
     const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
     const [
@@ -50,11 +52,18 @@ const Register = () => {
         normalError,
     ] = useCreateUserWithEmailAndPassword(auth);
     useEffect(() => {
+        if (initialUser) {
+            if (!googleUser || !normalUser) {
+                navigate('/')
+            }
+        }
+    }, [initialUser, normalUser, googleUser])
+    useEffect(() => {
         if (googleUser) {
-            console.log(googleUser);
+            navigate('/')
         }
         else if (normalUser) {
-            console.log(normalUser)
+            navigate('/')
         }
     }, [googleUser, normalUser])
     useEffect(() => {
@@ -75,7 +84,7 @@ const Register = () => {
             toast.error(actualError, toastConfig)
         }
     }, [actualError])
-    if (googleLoading || normalLoading) {
+    if (googleLoading || normalLoading || initialLoading) {
         return <Loading></Loading>
     }
     return (
