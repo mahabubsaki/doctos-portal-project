@@ -5,9 +5,32 @@ import ResetPasswordModal from '../child/ResetPasswordModal';
 import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import Loading from '../utilities/Loading';
 import { useForm } from "react-hook-form";
+import * as Yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const Register = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+    const formSchema = Yup.object().shape({
+        confirm: Yup.string()
+            .oneOf([Yup.ref('password')], 'Passwords does not match')
+            .required('Please confirm your password'),
+        password: Yup.string()
+            .required("Password is required")
+            .matches(
+                /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+                "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+            ),
+        email: Yup.string()
+            .required("Email is required")
+            .matches(/[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                "Please provide a valid email address"),
+        fullName: Yup.string()
+            .required('Full Name is required')
+            .min(5, "Full Name is too short")
+            .max(20, "Full Name is too long")
+    })
+    const formOptions = { resolver: yupResolver(formSchema) }
+    const { register, handleSubmit, watch, formState: { errors } } = useForm(formOptions);
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
     const [resetModal, setResetModal] = useState(false)
     const onSubmit = (data) => {
@@ -27,78 +50,37 @@ const Register = () => {
                     <div className="w-full mb-3">
                         <label htmlFor="name">Full Name</label><br />
                         <input type="text" name="name" id="name" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
-                            {...register("fullName", {
-                                required: {
-                                    value: true,
-                                    message: "Please enter your full name"
-                                },
-                                maxLength: {
-                                    value: 20,
-                                    message: "Name is too long"
-                                }
-                            })}
+                            {...register("fullName")}
                         />
                         <label className="label">
-                            {errors.fullName?.type === 'required' && <span className="label-text-alt text-red-500">{errors.fullName?.message}</span>}
-                            {errors.fullName?.type === 'maxLength' && <span className="label-text-alt text-red-500">{errors.fullName?.message}</span>}
+                            {<span className="label-text-alt text-red-500">{errors.fullName?.message}</span>}
                         </label>
                     </div>
                     <div className="w-full mb-3">
                         <label htmlFor="email">Email</label><br />
                         <input type="email" name="email" id="email" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
-                            {...register("email", {
-                                required: {
-                                    value: true,
-                                    message: "Please enter your email"
-                                },
-                                pattern: {
-                                    value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                                    message: 'Please Provide a valid email address'
-                                }
-                            })}
+                            {...register("email")}
                         />
                         <label className="label">
-                            {errors.email?.type === 'required' && <span className="label-text-alt text-red-500">{errors.email?.message}</span>}
-                            {errors.email?.type === 'pattern' && <span className="label-text-alt text-red-500">{errors.email?.message}</span>}
+                            {<span className="label-text-alt text-red-500">{errors.email?.message}</span>}
                         </label>
                     </div>
                     <div className="w-full mb-3">
                         <label htmlFor="password">Password</label><br />
                         <input type="password" name="password" id="password" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
                             ref={register}
-                            {...register("password", {
-                                required: {
-                                    value: true,
-                                    message: "Please enter your preffered password"
-                                },
-                                minLength: {
-                                    value: 8,
-                                    message: "Password Length must be at least 8 characters"
-                                },
-                                pattern: {
-                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%&$])(?=.{8,})/,
-                                    message: 'Password must include one small letter, one capital letter, one number and a special character (E.g: !@#%&$)'
-                                },
-
-                            })} />
+                            {...register("password")} />
                         <label className="label">
-                            {errors.password?.type === 'required' && <span className="label-text-alt text-red-500">{errors.password?.message}</span>}
-                            {errors.password?.type === 'pattern' && <span className="label-text-alt text-red-500">{errors.password?.message}</span>}
-                            {errors.password?.type === 'minLength' && <span className="label-text-alt text-red-500">{errors.password?.message}</span>}
+                            {<span className="label-text-alt text-red-500">{errors.password?.message}</span>}
                         </label>
                     </div>
                     <div className="w-full mb-3">
                         <label htmlFor="confirm">Confirm Password</label><br />
                         <input type="password" name="confirm" id="confirm" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
-                            {...register("confirm", {
-                                required: {
-                                    value: true,
-                                    message: "Please confirm password",
-                                },
-                            })}
+                            {...register("confirm")}
                         />
                         <label className="label">
-                            {errors.confirm?.type === 'required' && <span className="label-text-alt text-red-500">{errors.confirm?.message}</span>}
+                            {<span className="label-text-alt text-red-500">{errors.confirm?.message}</span>}
                         </label>
                     </div>
                     <button className="text-sm text-white btn w-full bg-projectNeutral" type="submit">Sign Up</button>
