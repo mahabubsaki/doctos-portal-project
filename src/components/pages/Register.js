@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import auth from '../../firebase.init';
 import ResetPasswordModal from '../child/ResetPasswordModal';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import Loading from '../utilities/Loading';
 import { useForm } from "react-hook-form";
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { ToastContext } from '../../App';
+import { toast } from 'react-toastify';
 
 const Register = () => {
-
+    const { toastConfig } = useContext(ToastContext)
+    const [resetModal, setResetModal] = useState(false)
+    const [actualError, setActualError] = useState('')
     const formSchema = Yup.object().shape({
         confirm: Yup.string()
             .oneOf([Yup.ref('password')], 'Passwords does not match')
@@ -31,15 +35,47 @@ const Register = () => {
     })
     const formOptions = { resolver: yupResolver(formSchema) }
     const { register, handleSubmit, watch, formState: { errors } } = useForm(formOptions);
-    const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-    const [resetModal, setResetModal] = useState(false)
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async ({ fullName, email, password }) => {
+        await createUserWithEmailAndPassword(email, password)
+        await updateProfile({ displayName: fullName });
     }
-    if (user) {
-        console.log(user);
-    }
-    if (loading) {
+
+
+    const [updateProfile] = useUpdateProfile(auth);
+    const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+    const [
+        createUserWithEmailAndPassword,
+        normalUser,
+        normalLoading,
+        normalError,
+    ] = useCreateUserWithEmailAndPassword(auth);
+    useEffect(() => {
+        if (googleUser) {
+            console.log(googleUser);
+        }
+        else if (normalUser) {
+            console.log(normalUser)
+        }
+    }, [googleUser, normalUser])
+    useEffect(() => {
+        if (googleError) {
+            setActualError('Something went wrong!')
+        }
+        else if (normalError) {
+            if (normalError.message.includes('email-already-in-use')) {
+                setActualError('User already exists with given e-mail!')
+            }
+            else {
+                setActualError('Something went wrong!')
+            }
+        }
+    }, [googleError, normalError])
+    useEffect(() => {
+        if (actualError) {
+            toast.error(actualError, toastConfig)
+        }
+    }, [actualError])
+    if (googleLoading || normalLoading) {
         return <Loading></Loading>
     }
     return (
