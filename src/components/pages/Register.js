@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ResetPasswordModal from '../child/ResetPasswordModal';
 
 const Register = () => {
+    const [resetModal, setResetModal] = useState(false)
     return (
         <div className="min-h-[500px] flex justify-center items-center">
             <div className="w-[385px] mx-auto testimonial-card p-7">
@@ -21,7 +23,10 @@ const Register = () => {
                     </div>
                     <button className="text-sm text-white btn w-full bg-projectNeutral" type="submit">Sign Up</button>
                 </form>
-                <button className="mb-3">Forget Password?</button>
+                <label htmlFor="reset-modal" className="modal-button cursor-pointer" onClick={() => setResetModal(true)}>Forget Password?</label>
+                {resetModal && <ResetPasswordModal
+                    setResetModal={setResetModal}
+                ></ResetPasswordModal>}
                 <div className="flex flex-col w-full border-opacity-50">
                     <div className="grid card rounded-box place-items-center">
                         <span className="text-xs">Already member? <Link to="/login" className="text-projectPrimary">Log In</Link></span>
