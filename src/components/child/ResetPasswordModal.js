@@ -6,36 +6,14 @@ import auth from '../../firebase.init';
 
 const ResetPasswordModal = ({ setResetModal }) => {
     const { toastConfig } = useContext(ToastContext)
-    const [isError, setIsError] = useState(false)
-    const [myError, setError] = useState('')
-    const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
+    const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(
         auth
     );
-    useEffect(() => {
-        if (myError) {
-            toast.error(myError)
-        }
-    }, [myError])
-    useEffect(() => {
-        if (error) {
-            console.log(error.message);
-            if (error.message.includes('too-many-requests')) {
-                setError('Requested for too many reset password, try again later')
-            }
-            else {
-                setError('User not found with given email')
-            }
-            setIsError(true);
-        }
-    }, [error])
     const handleResetForm = async (e) => {
-        setError('')
-        setIsError(false);
         e.preventDefault();
         await sendPasswordResetEmail(e.target.email.value)
-        if (!isError) {
-            alert('fuck')
-        }
+        toast.info(`Sent password reset email to ${e.target.email.value}`, toastConfig)
+        setResetModal(false)
     }
     return (
         <>
