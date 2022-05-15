@@ -1,14 +1,72 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useAuthState, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { ToastContext } from '../../App';
+import auth from '../../firebase.init';
 import ResetPasswordModal from '../child/ResetPasswordModal';
+import Loading from '../utilities/Loading';
 
 const Login = () => {
+    const navigate = useNavigate()
+    const { toastConfig } = useContext(ToastContext)
+    let location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+    const [actualError, setActualError] = useState('')
     const [resetModal, setResetModal] = useState(false)
+    const [initialUser, initialLoading] = useAuthState(auth);
+    const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+    const [
+        signInWithEmailAndPassword,
+        normalUser,
+        normalLoading,
+        normalError,
+    ] = useSignInWithEmailAndPassword(auth);
+    useEffect(() => {
+        if (initialUser) {
+            if (!googleUser || !normalUser) {
+                navigate('/')
+            }
+        }
+    }, [initialUser, normalUser, googleUser])
+    useEffect(() => {
+        if (googleUser || normalUser) {
+            navigate(from)
+        }
+    }, [googleUser, normalUser])
+    useEffect(() => {
+        if (actualError) {
+            toast.error(actualError, toastConfig)
+        }
+    }, [actualError])
+    useEffect(() => {
+        if (googleError) {
+            setActualError('Something went wrong!')
+        }
+        else if (normalError) {
+            console.log(normalError);
+            if (normalError?.message.includes('user-not-found')) {
+                setActualError('User not found with given email address')
+            }
+            else if (normalError?.message.includes('wrong-password')) {
+                setActualError('Password is wrong, please try again')
+            }
+            else {
+                setActualError('Something went wrong!')
+            }
+        }
+    }, [googleError, normalError])
+    const handleLogin = async (e) => {
+        signInWithEmailAndPassword(e.target.email.value, e.target.password.value)
+    }
+    if (initialLoading || googleLoading || normalLoading) {
+        return <Loading></Loading>
+    }
     return (
         <div className="min-h-[500px] flex justify-center items-center">
             <div className="w-[385px] mx-auto testimonial-card p-7">
                 <h1 className="text-xl mb-9 text-center">Login</h1>
-                <form>
+                <form onSubmit={handleLogin}>
                     <div className="w-full mb-3">
                         <label htmlFor="email">Email</label><br />
                         <input type="email" name="email" id="email" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1" required />
@@ -29,7 +87,7 @@ const Login = () => {
                     </div>
                     <div className="divider">OR</div>
                     <div>
-                        <button className="btn btn-outline w-full border border-[#3A4256] bg-white box-border text-projectAccent rounded-lg">CONTINUE WITH GOOGLE</button>
+                        <button className="btn btn-outline w-full border border-[#3A4256] bg-white box-border text-projectAccent rounded-lg" onClick={() => signInWithGoogle()}>CONTINUE WITH GOOGLE</button>
                     </div>
                 </div>
             </div>
