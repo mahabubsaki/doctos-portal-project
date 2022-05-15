@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import auth from '../../firebase.init';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Loading from '../utilities/Loading';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
     const [user, loading] = useAuthState(auth);
@@ -20,6 +21,9 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
         // }
         // saveBooking()
         setTreatment(null)
+    }
+    if (loading) {
+        return <Loading></Loading>
     }
     return (
         <>

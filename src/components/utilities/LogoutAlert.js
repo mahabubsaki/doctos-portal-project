@@ -16,9 +16,6 @@ const LogoutAlert = ({ props }) => {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes',
             cancelButtonText: 'No',
-            onOpen: () => {
-                // code
-            }
         }).then((result) => {
             if (result.value) {
                 signOut(auth)
