@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import auth from '../../firebase.init';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Loading from '../utilities/Loading';
+import { toast } from 'react-toastify';
+import { ToastContext } from '../../App';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
+    const { toastConfig } = useContext(ToastContext)
     const [user, loading] = useAuthState(auth);
     const handleModalInput = (e) => {
         e.preventDefault();
@@ -19,8 +22,13 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
             email: user?.email
         }
         const saveBooking = async () => {
-            // const { data } = await axios.post('')
-            console.log(userInput);
+            const { data } = await axios.post('http://localhost:5000/bookings', userInput)
+            if (data.acknowledged) {
+                toast.success('Booked successfully', toastConfig)
+            }
+            else {
+                toast.error(`You have already booked an appointment on ${format(date, 'PP')} for ${treatment.name}`)
+            }
         }
         saveBooking()
         setTreatment(null)

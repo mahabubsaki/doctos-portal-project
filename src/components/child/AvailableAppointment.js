@@ -9,11 +9,11 @@ const AvailableAppointment = ({ date }) => {
     const [treatment, setTreatment] = useState(null)
     useEffect(() => {
         const getServices = async () => {
-            const { data } = await axios.get('http://localhost:5000/services')
+            const { data } = await axios.get(`http://localhost:5000/services?date=${format(date, 'PP')}`)
             setServices(data)
         }
         getServices()
-    }, [])
+    }, [date])
     return (
         <div className="my-10">
             {date && <h1 className="text-projectSecondary text-2xl text-center">Appointment Available on {format(date, 'PP')}</h1>}
