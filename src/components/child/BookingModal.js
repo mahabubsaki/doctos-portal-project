@@ -1,8 +1,11 @@
 import React from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
+import auth from '../../firebase.init';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
+    const [user, loading] = useAuthState(auth);
     const handleModalInput = (e) => {
         e.preventDefault();
         const userInput = {
@@ -34,9 +37,10 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
                                 value={slot}
                             >{slot}</option>)}
                         </select>
-                        <input type="text" name="name" className="w-full border border-[#CFCFCF] p-2 rounded-lg mb-4" placeholder="Full Name" required />
+                        <input type="text" name="name" className="w-full border bg-[#E6E6E6] p-2 rounded-lg mb-4" value={user?.displayName} readOnly disabled />
+                        <input type="email" name="email" className="w-full border bg-[#E6E6E6] p-2 rounded-lg mb-4"
+                            value={user?.email} readOnly disabled />
                         <input type="tel" name="phone" className="w-full border border-[#CFCFCF] p-2 rounded-lg mb-4" required placeholder="Phone Number" />
-                        <input type="email" name="email" className="w-full border border-[#CFCFCF] p-2 rounded-lg mb-4" required placeholder="Email" />
                         <button type="submit" className="w-full bg-projectNeutral p-2 rounded-lg text-white">Submit</button>
                     </form>
                 </div>
