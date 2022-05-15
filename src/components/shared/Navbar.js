@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import auth from '../../firebase.init';
 import CustomLink from '../utilities/CustomLink';
 import Loading from '../utilities/Loading';
+import LogoutAlert from '../utilities/LogoutAlert';
 
 const Navbar = () => {
     const [user, loading] = useAuthState(auth);
@@ -17,6 +18,12 @@ const Navbar = () => {
     //         document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
     //     }
     // }
+    const WarningData = {
+        title: "Confirm Logout",
+        type: "warning",
+        text: "Are you sure you want to Log Out?",
+        footer: ""
+    };
     if (loading) {
         return <Loading></Loading>
     }
@@ -77,7 +84,7 @@ const Navbar = () => {
                             :
                             <>
                                 <li><CustomLink to="/bookings">My Bookings</CustomLink></li>
-                                <button className="btn btn-primary" onClick={() => signOut(auth)}>Sign Out</button>
+                                <LogoutAlert {...WarningData} />
                             </>
                     }
                 </ul>
