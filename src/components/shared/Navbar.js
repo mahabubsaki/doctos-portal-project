@@ -39,8 +39,18 @@ const Navbar = () => {
                         <li><CustomLink to="/appointment">Appointment</CustomLink></li>
                         <li><CustomLink to="/reviews">Reviews</CustomLink></li>
                         <li><CustomLink to="/contact">Contact Us</CustomLink></li>
-                        <li><CustomLink to="/login">Login</CustomLink></li>
-                        <li><CustomLink to="/register">Sign Up</CustomLink></li>
+                        {
+                            !user ?
+                                <>
+                                    <li><CustomLink to="/login">Login</CustomLink></li>
+                                    <li><CustomLink to="/register">Sign Up</CustomLink></li>
+                                </>
+                                :
+                                <>
+                                    <li><CustomLink to="/bookings">My Bookings</CustomLink></li>
+                                    <button className="btn btn-primary" onClick={() => signOut(auth)}>Sign Out</button>
+                                </>
+                        }
                     </ul>
                 </div>
                 <Link className="btn btn-ghost normal-case text-xl" to="/">Doctors Portal</Link>
@@ -67,7 +77,7 @@ const Navbar = () => {
                             :
                             <>
                                 <li><CustomLink to="/bookings">My Bookings</CustomLink></li>
-                                <button className="btn btn-error" onClick={() => signOut(auth)}>Sign Out</button>
+                                <button className="btn btn-primary" onClick={() => signOut(auth)}>Sign Out</button>
                             </>
                     }
                 </ul>

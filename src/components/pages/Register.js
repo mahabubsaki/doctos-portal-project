@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import ResetPasswordModal from '../child/ResetPasswordModal';
-import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import { useAuthState, useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import Loading from '../utilities/Loading';
 import { useForm } from "react-hook-form";
 import * as Yup from 'yup'
@@ -38,10 +38,12 @@ const Register = () => {
     const onSubmit = async ({ fullName, email, password }) => {
         await createUserWithEmailAndPassword(email, password)
         await updateProfile({ displayName: fullName });
+        await sendEmailVerification()
     }
 
 
     const navigate = useNavigate()
+    const [sendEmailVerification] = useSendEmailVerification(auth);
     const [initialUser, initialLoading] = useAuthState(auth);
     const [updateProfile] = useUpdateProfile(auth);
     const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
@@ -94,7 +96,7 @@ const Register = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="w-full mb-3">
                         <label htmlFor="name">Full Name</label><br />
-                        <input type="text" name="name" id="name" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
+                        <input type="text" name="name" id="name" className={`w-full rounded-lg border ${errors.fullName?.message ? 'border-red-500' : 'border-[#CFCFCF]'} p-2 mt-1`}
                             {...register("fullName")}
                         />
                         <label className="label">
@@ -103,7 +105,7 @@ const Register = () => {
                     </div>
                     <div className="w-full mb-3">
                         <label htmlFor="email">Email</label><br />
-                        <input type="email" name="email" id="email" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
+                        <input type="email" name="email" id="email" className={`w-full rounded-lg border ${errors.email?.message ? 'border-red-500' : 'border-[#CFCFCF]'} p-2 mt-1`}
                             {...register("email")}
                         />
                         <label className="label">
@@ -112,7 +114,7 @@ const Register = () => {
                     </div>
                     <div className="w-full mb-3">
                         <label htmlFor="password">Password</label><br />
-                        <input type="password" name="password" id="password" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
+                        <input type="password" name="password" id="password" className={`w-full rounded-lg border ${errors.password?.message ? 'border-red-500' : 'border-[#CFCFCF]'} p-2 mt-1`}
                             ref={register}
                             {...register("password")} />
                         <label className="label">
@@ -121,7 +123,7 @@ const Register = () => {
                     </div>
                     <div className="w-full mb-3">
                         <label htmlFor="confirm">Confirm Password</label><br />
-                        <input type="password" name="confirm" id="confirm" className="w-full rounded-lg border border-[#CFCFCF] p-2 mt-1"
+                        <input type="password" name="confirm" id="confirm" className={`w-full rounded-lg border ${errors.confirm?.message ? 'border-red-500' : 'border-[#CFCFCF]'} p-2 mt-1`}
                             {...register("confirm")}
                         />
                         <label className="label">

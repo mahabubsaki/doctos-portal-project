@@ -13,8 +13,13 @@ import NotFound from './components/pages/NotFound';
 import Footer from './components/shared/Footer';
 import 'react-toastify/dist/ReactToastify.css';
 import { createContext } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from './firebase.init';
+import Loading from './components/utilities/Loading';
+import IsVarified from './components/shared/IsVarified';
 export const ToastContext = createContext()
 function App() {
+  const [user, loading] = useAuthState(auth);
   const toastConfig = {
     position: "top-right",
     autoClose: 4000,
@@ -24,10 +29,14 @@ function App() {
     draggable: true,
     progress: undefined,
   }
+  if (loading) {
+    return <Loading></Loading>
+  }
   return (
     <ToastContext.Provider value={toastConfig}>
       <div className="App">
         <Navbar></Navbar>
+        {(!user?.emailVerified && user?.uid) && <IsVarified></IsVarified>}
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>
           <Route path="/about" element={<About></About>}></Route>
