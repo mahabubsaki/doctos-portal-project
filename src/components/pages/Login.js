@@ -32,6 +32,7 @@ const Login = () => {
     useEffect(() => {
         if (googleUser || normalUser) {
             navigate(from)
+            toast.success('Successfully logged in', toastConfig)
         }
     }, [googleUser, normalUser])
     useEffect(() => {
@@ -57,7 +58,7 @@ const Login = () => {
         }
     }, [googleError, normalError])
     const handleLogin = async (e) => {
-        signInWithEmailAndPassword(e.target.email.value, e.target.password.value)
+        await signInWithEmailAndPassword(e.target.email.value, e.target.password.value)
     }
     if (initialLoading || googleLoading || normalLoading) {
         return <Loading></Loading>
