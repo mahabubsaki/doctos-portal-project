@@ -10,16 +10,19 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
     const handleModalInput = (e) => {
         e.preventDefault();
         const userInput = {
+            id: treatment._id,
             treatment: treatment.name,
             slot: e.target.slot.value,
-            name: e.target.name.value,
+            name: user?.displayName,
             phone: e.target.phone.value,
-            email: e.target.email.value
+            date: format(date, 'PP'),
+            email: user?.email
         }
-        // const saveBooking = async () => {
-        //     const { data } = await axios.post('')
-        // }
-        // saveBooking()
+        const saveBooking = async () => {
+            // const { data } = await axios.post('')
+            console.log(userInput);
+        }
+        saveBooking()
         setTreatment(null)
     }
     if (loading) {
