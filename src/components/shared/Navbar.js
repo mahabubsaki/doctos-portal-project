@@ -18,11 +18,11 @@ const Navbar = () => {
     //         document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
     //     }
     // }
-    const WarningData = {
+    const AlertData = {
         title: "Confirm Logout",
         type: "warning",
         text: "Are you sure you want to Log Out?",
-        footer: ""
+        btnType: "btn btn-primary",
     };
     if (loading) {
         return <Loading></Loading>
@@ -84,7 +84,7 @@ const Navbar = () => {
                             :
                             <>
                                 <li><CustomLink to="/bookings">My Bookings</CustomLink></li>
-                                <LogoutAlert {...WarningData} />
+                                <LogoutAlert props={AlertData}></LogoutAlert>
                             </>
                     }
                 </ul>

@@ -1,18 +1,16 @@
 import { signOut } from "firebase/auth";
-import React, { Component } from "react";
 import Swal from "sweetalert2";
 import auth from "../../firebase.init";
 
-export default class LogoutAlert extends Component {
+import React from 'react';
 
-    constructor() {
-        super();
-        this.HandleClick = this.HandleClick.bind(this);
-    }
-
-    HandleClick() {
+const LogoutAlert = ({ props }) => {
+    const { title, type, text, btnType } = props
+    const handleSignout = () => {
         Swal.fire({
-            ...this.props,
+            text: text,
+            type: type,
+            title: title,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -27,14 +25,12 @@ export default class LogoutAlert extends Component {
             }
         });
     }
+    return (
+        <button className={btnType} onClick={handleSignout}>
+            Sign Out
+        </button>
+    );
+};
 
-    render() {
-        return (
-            <div>
-                <button className="btn btn-primary" onClick={this.HandleClick}>
-                    Sign Out
-                </button>
-            </div>
-        );
-    }
-}
+export default LogoutAlert;
+
