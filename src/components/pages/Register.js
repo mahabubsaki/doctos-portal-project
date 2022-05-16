@@ -81,7 +81,7 @@ const Register = () => {
         else if (normalUser) {
             const savenUserDb = async () => {
                 await axios.put(`http://localhost:5000/user/${normalUser.user.email}`, { name: normalName, lastLogin: format(new Date(), 'PP') })
-                toast.success('Successfully logged in', toastConfig)
+                toast.success('Successfully signed up', toastConfig)
             }
             savenUserDb()
             const nUserToken = async () => {

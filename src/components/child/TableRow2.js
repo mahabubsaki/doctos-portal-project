@@ -20,13 +20,22 @@ const TableRow2 = ({ user, no, initialUser, refetch }) => {
         }).then((result) => {
             if (result.value) {
                 const makingAdmin = async () => {
-                    const { data } = await axios.put(`http://localhost:5000/makeAdmin?email=${email}&role=Admin`)
-                    if (data.acknowledged) {
-                        toast.success('Changed this user role to admin successfully', toastConfig)
-                        refetch()
+                    try {
+                        const { data } = await axios.put(`http://localhost:5000/makeAdmin?email=${email}&role=Admin`, { email }, {
+                            headers: {
+                                authorization: `Bearer ${localStorage.getItem('access_token')}`
+                            }
+                        })
+                        if (data.acknowledged) {
+                            toast.success('Changed this user role to admin successfully', toastConfig)
+                            refetch()
+                        }
+                        else {
+                            toast.error('Something went wrong, please try again', toastConfig)
+                        }
                     }
-                    else {
-                        toast.error('Something went wrong, please try again', toastConfig)
+                    catch (err) {
+                        toast.error("You don't have permission to change  user role", toastConfig)
                     }
                 }
                 makingAdmin()
@@ -46,13 +55,22 @@ const TableRow2 = ({ user, no, initialUser, refetch }) => {
         }).then((result) => {
             if (result.value) {
                 const makingMember = async () => {
-                    const { data } = await axios.put(`http://localhost:5000/makeAdmin?email=${email}&role=Member`)
-                    if (data.acknowledged) {
-                        toast.success('Changed this user role to member successfully', toastConfig)
-                        refetch()
+                    try {
+                        const { data } = await axios.put(`http://localhost:5000/makeAdmin?email=${email}&role=Member`, { email }, {
+                            headers: {
+                                authorization: `Bearer ${localStorage.getItem('access_token')}`
+                            }
+                        })
+                        if (data.acknowledged) {
+                            toast.success('Changed this user role to member successfully', toastConfig)
+                            refetch()
+                        }
+                        else {
+                            toast.error('Something went wrong, please try again', toastConfig)
+                        }
                     }
-                    else {
-                        toast.error('Something went wrong, please try again', toastConfig)
+                    catch (err) {
+                        toast.error("You don't have permission to change user role", toastConfig)
                     }
                 }
                 makingMember()
@@ -72,13 +90,22 @@ const TableRow2 = ({ user, no, initialUser, refetch }) => {
         }).then((result) => {
             if (result.value) {
                 const deletingUser = async () => {
-                    const { data } = await axios.delete(`http://localhost:5000/deleteUser?email=${email}`)
-                    if (data.acknowledged) {
-                        toast.success(`Successfully deleted user ${email}`)
-                        refetch()
+                    try {
+                        const { data } = await axios.put(`http://localhost:5000/deleteUser?email=${email}`, { email }, {
+                            headers: {
+                                authorization: `Bearer ${localStorage.getItem('access_token')}`
+                            }
+                        })
+                        if (data.acknowledged) {
+                            toast.success(`Successfully deleted user ${email}`)
+                            refetch()
+                        }
+                        else {
+                            toast.error(`Failed to delete, please try again later`)
+                        }
                     }
-                    else {
-                        toast.error(`Failed to delete, please try again later`)
+                    catch (err) {
+                        toast.error("You don't have permission to delete user", toastConfig)
                     }
                 }
                 deletingUser()

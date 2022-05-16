@@ -1,20 +1,36 @@
 import axios from 'axios';
-import React from 'react';
+import { signOut } from 'firebase/auth';
+import React, { useContext } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { ToastContext } from '../../App';
 import auth from '../../firebase.init';
 import Loading from '../utilities/Loading';
 import TableRow2 from './TableRow2';
 
 const AllUsers = () => {
+    const { toastConfig } = useContext(ToastContext)
+    const navigate = useNavigate()
     const [user1, loading] = useAuthState(auth);
     const { data, isLoading, refetch } = useQuery('users', async () => {
-        return await axios.post('http://localhost:5000/all-users', '', {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('access_token')}`
+        try {
+            return await axios.post('http://localhost:5000/all-users', '', {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('access_token')}`
+                }
+            }
+            )
+        }
+        catch (error) {
+            if (error) {
+                localStorage.removeItem('access_token')
+                signOut(auth)
+                navigate('/')
+                toast.error('Something went wrong', toastConfig)
             }
         }
-        )
     })
     if (isLoading || loading) {
         return <Loading></Loading>
