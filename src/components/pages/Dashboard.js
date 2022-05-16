@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
-    const [myBookings, setMyBookings] = useState([])
     return (
         <div className="drawer drawer-mobile">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

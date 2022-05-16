@@ -5,11 +5,11 @@ import auth from "../../firebase.init";
 import React from 'react';
 
 const LogoutAlert = ({ props }) => {
-    const { title, type, text, btnType } = props
+    const { title, icon, text, btnType } = props
     const handleSignout = () => {
         Swal.fire({
             text: text,
-            type: type,
+            icon: icon,
             title: title,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -18,6 +18,7 @@ const LogoutAlert = ({ props }) => {
             cancelButtonText: 'No',
         }).then((result) => {
             if (result.value) {
+                localStorage.removeItem('access_token')
                 signOut(auth)
             }
         });

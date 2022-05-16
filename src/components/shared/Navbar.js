@@ -9,6 +9,10 @@ import LogoutAlert from '../utilities/LogoutAlert';
 
 const Navbar = () => {
     const [user, loading] = useAuthState(auth);
+    const handleSignOut = () => {
+        localStorage.removeItem('access_token')
+        signOut(auth)
+    }
     // const handleTheme = () => {
     //     const current = document.getElementsByTagName('html')[0].getAttribute('data-theme')
     //     if (current === "light") {
@@ -20,7 +24,7 @@ const Navbar = () => {
     // }
     const AlertData = {
         title: "Confirm Logout",
-        type: "warning",
+        icon: "warning",
         text: "Are you sure you want to Log Out?",
         btnType: "btn btn-primary",
     };
@@ -28,7 +32,7 @@ const Navbar = () => {
         return <Loading></Loading>
     }
     return (
-        <div className="navbar bg-base-100 sticky top-0 left-0 right-0 z-10">
+        <div className="navbar bg-base-100">
             <div className="navbar-start">
                 <div className="dropdown">
                     <label tabIndex="0" className="btn btn-ghost md:hidden">
@@ -55,7 +59,7 @@ const Navbar = () => {
                                 :
                                 <>
                                     <li><CustomLink to="/dashboard">Dashboard</CustomLink></li>
-                                    <button className="btn btn-primary" onClick={() => signOut(auth)}>Sign Out</button>
+                                    <LogoutAlert props={AlertData}></LogoutAlert>
                                 </>
                         }
                     </ul>

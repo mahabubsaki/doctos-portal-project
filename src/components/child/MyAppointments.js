@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useQuery } from 'react-query';
 import auth from '../../firebase.init';
+import { useQuery } from 'react-query';
 import Loading from '../utilities/Loading';
 import TableRow from './TableRow';
 
@@ -15,7 +15,6 @@ const MyAppointments = () => {
     if (isLoading || loading) {
         return <Loading></Loading>
     }
-    console.log(data);
     return (
         <div>
             <div className="overflow-x-auto">

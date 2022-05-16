@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useAuthState, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -30,9 +31,31 @@ const Login = () => {
         }
     }, [initialUser, normalUser, googleUser])
     useEffect(() => {
-        if (googleUser || normalUser) {
+        if (googleUser) {
+            const savegUserDb = async () => {
+                await axios.put(`http://localhost:5000/user/${googleUser.user.email}`)
+                toast.success('Successfully logged in', toastConfig)
+            }
+            savegUserDb()
+            const gUserToken = async () => {
+                const { data } = await axios.get(`http://localhost:5000/token?email=${googleUser.user.email}`)
+                localStorage.setItem('access_token', data.token)
+            }
+            gUserToken()
             navigate(from)
-            toast.success('Successfully logged in', toastConfig)
+        }
+        else if (normalUser) {
+            const savenUserDb = async () => {
+                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`)
+                toast.success('Successfully logged in', toastConfig)
+            }
+            savenUserDb()
+            const nUserToken = async () => {
+                const { data } = await axios.get(`http://localhost:5000/token?email=${normalUser.user.email}`)
+                localStorage.setItem('access_token', data.token)
+            }
+            nUserToken()
+            navigate(from)
         }
     }, [googleUser, normalUser])
     useEffect(() => {
@@ -45,7 +68,6 @@ const Login = () => {
             setActualError('Something went wrong!')
         }
         else if (normalError) {
-            console.log(normalError);
             if (normalError?.message.includes('user-not-found')) {
                 setActualError('User not found with given email address')
             }
@@ -55,6 +77,9 @@ const Login = () => {
             else {
                 setActualError('Something went wrong!')
             }
+        }
+        else {
+            setActualError('')
         }
     }, [googleError, normalError])
     const handleLogin = async (e) => {

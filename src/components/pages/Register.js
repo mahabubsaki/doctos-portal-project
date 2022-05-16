@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ToastContext } from '../../App';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Register = () => {
     const { toastConfig } = useContext(ToastContext)
@@ -62,9 +63,29 @@ const Register = () => {
     }, [initialUser, normalUser, googleUser])
     useEffect(() => {
         if (googleUser) {
+            const savegUserDb = async () => {
+                await axios.put(`http://localhost:5000/user/${googleUser.user.email}`)
+                toast.success('Successfully logged in', toastConfig)
+            }
+            savegUserDb()
+            const gUserToken = async () => {
+                const { data } = await axios.get(`http://localhost:5000/token?email=${googleUser.user.email}`)
+                localStorage.setItem('access_token', data.token)
+            }
+            gUserToken()
             navigate('/')
         }
         else if (normalUser) {
+            const savenUserDb = async () => {
+                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`)
+                toast.success('Successfully logged in', toastConfig)
+            }
+            savenUserDb()
+            const nUserToken = async () => {
+                const { data } = await axios.get(`http://localhost:5000/token?email=${normalUser.user.email}`)
+                localStorage.setItem('access_token', data.token)
+            }
+            nUserToken()
             navigate('/')
         }
     }, [googleUser, normalUser])
@@ -79,6 +100,9 @@ const Register = () => {
             else {
                 setActualError('Something went wrong!')
             }
+        }
+        else {
+            setActualError('')
         }
     }, [googleError, normalError])
     useEffect(() => {
