@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { ToastContext } from '../../App';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const Register = () => {
     const { toastConfig } = useContext(ToastContext)
@@ -64,7 +65,7 @@ const Register = () => {
     useEffect(() => {
         if (googleUser) {
             const savegUserDb = async () => {
-                await axios.put(`http://localhost:5000/user/${googleUser.user.email}`)
+                await axios.put(`http://localhost:5000/user/${googleUser.user.email}`, { name: googleUser.user.displayName, lastLogin: format(new Date(), 'PP') })
                 toast.success('Successfully logged in', toastConfig)
             }
             savegUserDb()
@@ -77,7 +78,7 @@ const Register = () => {
         }
         else if (normalUser) {
             const savenUserDb = async () => {
-                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`)
+                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`, { name: googleUser.user.displayName, lastLogin: format(new Date(), 'PP') })
                 toast.success('Successfully logged in', toastConfig)
             }
             savenUserDb()

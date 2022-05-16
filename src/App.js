@@ -21,6 +21,8 @@ import RequireAuth from './components/utilities/RequireAuth';
 import Dashboard from './components/pages/Dashboard';
 import MyAppointments from './components/child/MyAppointments';
 import MyReview from './components/child/MyReviews';
+import MyHistory from './components/child/MyHistory';
+import AllUsers from './components/child/AllUsers';
 export const ToastContext = createContext()
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -52,6 +54,8 @@ function App() {
           <Route path="dashboard" element={<RequireAuth><Dashboard></Dashboard></RequireAuth>}>
             <Route index element={<MyAppointments></MyAppointments>}></Route>
             <Route path="my-reviews" element={<MyReview></MyReview>}></Route>
+            <Route path="my-history" element={<MyHistory></MyHistory>}></Route>
+            <Route path="all-users" element={<AllUsers></AllUsers>}></Route>
           </Route>
           <Route path="reviews" element={<Reviews></Reviews>}></Route>
           <Route path="contact" element={<Contact></Contact>}></Route>
