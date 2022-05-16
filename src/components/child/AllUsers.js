@@ -41,6 +41,7 @@ const AllUsers = () => {
                             user={user}
                             no={index + 1}
                             initialUser={user1}
+                            refetch={refetch}
                         ></TableRow2>)
                     }
                 </tbody>
