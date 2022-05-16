@@ -7,7 +7,7 @@ import Loading from '../utilities/Loading';
 import { toast } from 'react-toastify';
 import { ToastContext } from '../../App';
 
-const BookingModal = ({ treatment, date, setTreatment }) => {
+const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
     const { toastConfig } = useContext(ToastContext)
     const [user, loading] = useAuthState(auth);
     const handleModalInput = (e) => {
@@ -25,6 +25,7 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
             const { data } = await axios.post('http://localhost:5000/bookings', userInput)
             if (data.acknowledged) {
                 toast.success('Booked successfully', toastConfig)
+                refetch()
             }
             else {
                 toast.error(`You have already booked an appointment on ${format(date, 'PP')} for ${treatment.name}`)
