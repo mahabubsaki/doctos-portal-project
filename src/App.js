@@ -18,6 +18,9 @@ import auth from './firebase.init';
 import Loading from './components/utilities/Loading';
 import IsVarified from './components/shared/IsVarified';
 import RequireAuth from './components/utilities/RequireAuth';
+import Dashboard from './components/pages/Dashboard';
+import MyAppointments from './components/child/MyAppointments';
+import MyReview from './components/child/MyReviews';
 export const ToastContext = createContext()
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -39,17 +42,21 @@ function App() {
         <Navbar></Navbar>
         {(!user?.emailVerified && user?.uid) && <IsVarified></IsVarified>}
         <Routes>
-          <Route path="/" element={<Home></Home>}></Route>
-          <Route path="/about" element={<About></About>}></Route>
-          <Route path="/appointment" element={
+          <Route path="" element={<Home></Home>}></Route>
+          <Route path="about" element={<About></About>}></Route>
+          <Route path="appointment" element={
             <RequireAuth>
               <Appointment></Appointment>
             </RequireAuth>
           }></Route>
-          <Route path="/reviews" element={<Reviews></Reviews>}></Route>
-          <Route path="/contact" element={<Contact></Contact>}></Route>
-          <Route path="/login" element={<Login></Login>}></Route>
-          <Route path="/Register" element={<Register></Register>}></Route>
+          <Route path="dashboard" element={<RequireAuth><Dashboard></Dashboard></RequireAuth>}>
+            <Route index element={<MyAppointments></MyAppointments>}></Route>
+            <Route path="my-reviews" element={<MyReview></MyReview>}></Route>
+          </Route>
+          <Route path="reviews" element={<Reviews></Reviews>}></Route>
+          <Route path="contact" element={<Contact></Contact>}></Route>
+          <Route path="login" element={<Login></Login>}></Route>
+          <Route path="Register" element={<Register></Register>}></Route>
           <Route path="*" element={<NotFound></NotFound>}></Route>
         </Routes>
         <Footer></Footer>

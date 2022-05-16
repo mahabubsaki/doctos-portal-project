@@ -23,7 +23,7 @@ const LogoutAlert = ({ props }) => {
         });
     }
     return (
-        <button className={btnType} onClick={handleSignout}>
+        <button className={`${btnType} mx-1`} onClick={handleSignout}>
             Sign Out
         </button>
     );
