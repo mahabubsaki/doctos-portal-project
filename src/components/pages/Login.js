@@ -47,7 +47,7 @@ const Login = () => {
         }
         else if (normalUser) {
             const savenUserDb = async () => {
-                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`, { name: googleUser.user.displayName, lastLogin: format(new Date(), 'PP') })
+                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`, { name: normalUser.user.displayName, lastLogin: format(new Date(), 'PP') })
                 toast.success('Successfully logged in', toastConfig)
             }
             savenUserDb()

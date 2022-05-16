@@ -13,6 +13,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 
 const Register = () => {
+    const [normalName, setNormalName] = useState('')
     const { toastConfig } = useContext(ToastContext)
     const [resetModal, setResetModal] = useState(false)
     const [actualError, setActualError] = useState('')
@@ -39,6 +40,7 @@ const Register = () => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm(formOptions);
     const onSubmit = async ({ fullName, email, password }) => {
         await createUserWithEmailAndPassword(email, password)
+        await setNormalName(fullName)
         await updateProfile({ displayName: fullName });
         await sendEmailVerification()
     }
@@ -78,7 +80,7 @@ const Register = () => {
         }
         else if (normalUser) {
             const savenUserDb = async () => {
-                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`, { name: googleUser.user.displayName, lastLogin: format(new Date(), 'PP') })
+                await axios.put(`http://localhost:5000/user/${normalUser.user.email}`, { name: normalName, lastLogin: format(new Date(), 'PP') })
                 toast.success('Successfully logged in', toastConfig)
             }
             savenUserDb()
