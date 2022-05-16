@@ -73,7 +73,13 @@ const TableRow2 = ({ user, no, initialUser, refetch }) => {
             if (result.value) {
                 const deletingUser = async () => {
                     const { data } = await axios.delete(`http://localhost:5000/deleteUser?email=${email}`)
-                    // console.log(data);
+                    if (data.acknowledged) {
+                        toast.success(`Successfully deleted user ${email}`)
+                        refetch()
+                    }
+                    else {
+                        toast.error(`Failed to delete, please try again later`)
+                    }
                 }
                 deletingUser()
             }
