@@ -1,10 +1,11 @@
 import React from 'react';
 
-const Reviews = () => {
+const AddDoctor = () => {
     return (
         <div>
+
         </div>
     );
 };
 
-export default Reviews;
+export default AddDoctor;

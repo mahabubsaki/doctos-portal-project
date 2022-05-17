@@ -24,6 +24,8 @@ import MyReview from './components/child/MyReviews';
 import MyHistory from './components/child/MyHistory';
 import AllUsers from './components/child/AllUsers';
 import RequireAdmin from './components/utilities/RequireAdmin';
+import AddDoctor from './components/child/AddDoctor';
+import ManageDoctor from './components/child/ManageDoctor';
 export const ToastContext = createContext()
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -59,6 +61,16 @@ function App() {
             <Route path="all-users" element={
               <RequireAdmin>
                 <AllUsers></AllUsers>
+              </RequireAdmin>
+            }></Route>
+            <Route path="manage-doctor" element={
+              <RequireAdmin>
+                <ManageDoctor></ManageDoctor>
+              </RequireAdmin>
+            }></Route>
+            <Route path="add-doctor" element={
+              <RequireAdmin>
+                <AddDoctor></AddDoctor>
               </RequireAdmin>
             }></Route>
           </Route>
