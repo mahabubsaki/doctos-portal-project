@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import { useQuery } from 'react-query';
@@ -14,7 +14,7 @@ const MyAppointments = () => {
     const { toastConfig } = useContext(ToastContext)
     const navigate = useNavigate()
     const [user, loading] = useAuthState(auth);
-    const { data, isLoading, refetch } = useQuery(['my-bookings', user.email], async () => {
+    const { data, isLoading } = useQuery(['my-bookings', user.email], async () => {
         try {
             return await axios.post(`http://localhost:5000/bookings?email=${user.email}`, { email: user.email }, {
                 headers: {
