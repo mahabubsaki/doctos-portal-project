@@ -19,13 +19,38 @@ const AddDoctor = () => {
         const image = e.target.image.files[0]
         const name = e.target.image.files[0].name
         formdata.append('image', image, name)
-        const { data } = await axios.post('https://api.imgbb.com/1/upload?key=28f7e689e78cbdf683b41d414ebda692', formdata)
-        if (data.data.display_url) {
-            doctorInput.img = data.data.display_url
-
+        try {
+            const { data } = await axios.post('https://api.imgbb.com/1/upload?key=28f7e689e78cbdf683b41d414ebda692', formdata)
+            if (data.data.display_url) {
+                doctorInput.img = data.data.display_url
+                try {
+                    const { data } = await axios.post('http://localhost:5000/add-doctor', doctorInput, {
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem('access_token')}`
+                        }
+                    })
+                    if (data?.acknowledged) {
+                        toast.success('Added Doctor successfully', toastConfig)
+                        e.target.reset()
+                    }
+                    else {
+                        toast.error('Doctor with given email already exists', toastConfig)
+                        e.target.reset()
+                    }
+                }
+                catch (e) {
+                    toast.error("You don't have permission to add a doctor")
+                    e.target.reset()
+                }
+            }
+            else {
+                toast.error('Something went wrong, please try again', toastConfig)
+                e.target.reset()
+            }
         }
-        else {
-            toast.error('Something went wrong, please try again', toastConfig)
+        catch (e) {
+            toast.error('Please try with a different image', toastConfig)
+            e.target.reset()
         }
     }
     return (

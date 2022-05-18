@@ -1,16 +1,33 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 import { useQuery } from 'react-query';
 import Loading from '../utilities/Loading';
 import TableRow from './TableRow';
+import { signOut } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import { ToastContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 
 const MyAppointments = () => {
-    const [myBookings, setMyBookings] = useState([])
+    const { toastConfig } = useContext(ToastContext)
+    const navigate = useNavigate()
     const [user, loading] = useAuthState(auth);
     const { data, isLoading, refetch } = useQuery(['my-bookings', user.email], async () => {
-        return await axios.get(`http://localhost:5000/bookings?email=${user.email}`)
+        try {
+            return await axios.post(`http://localhost:5000/bookings?email=${user.email}`, { email: user.email }, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('access_token')}`
+                }
+            })
+        }
+        catch (error) {
+            localStorage.removeItem('access_token')
+            signOut(auth)
+            navigate('/')
+            toast.error('Something went wrong', toastConfig)
+        }
     })
     if (isLoading || loading) {
         return <Loading></Loading>
