@@ -1,10 +1,12 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { ToastContext } from '../../App';
 
 const TableRow3 = ({ no, dct, refetch }) => {
+    const { toastConfig } = useContext(ToastContext)
     const { doctor, img, email, phone, speciality } = dct
     const handleDoctorDelete = async (email) => {
         Swal.fire({
@@ -27,6 +29,13 @@ const TableRow3 = ({ no, dct, refetch }) => {
                                 authorization: `Bearer ${localStorage.getItem('access_token')}`,
                             },
                         })
+                        if (data.acknowledged) {
+                            toast.success('Deleted doctor successfully', toastConfig)
+                            refetch()
+                        }
+                        else {
+                            toast.error('Something went wrong, Please try again', toastConfig)
+                        }
                     }
                     catch (err) {
                         toast.error("You don't have permission to delete a doctor")
