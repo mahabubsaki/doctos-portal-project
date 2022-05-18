@@ -16,7 +16,7 @@ const MyAppointments = () => {
     const [user, loading] = useAuthState(auth);
     const { data, isLoading } = useQuery(['my-bookings', user.email], async () => {
         try {
-            return await axios.post(`http://localhost:5000/bookings?email=${user.email}`, { email: user.email }, {
+            return await axios.post(`http://localhost:5000/my-bookings?email=${user.email}`, { email: user.email }, {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('access_token')}`
                 }
@@ -35,7 +35,7 @@ const MyAppointments = () => {
     return (
         <div>
             <div className="overflow-x-auto">
-                <h3 className="text-xl text-center text-projectSecondary my-3">You have currently {data.data.length} {data.data.length > 0 ? "bookings" : "booking"}</h3>
+                <h3 className="text-xl text-center text-projectSecondary my-3">You have currently {data?.data?.length} {data?.data?.length > 0 ? "bookings" : "booking"}</h3>
                 <table className="table table-zebra w-full">
                     {/* <!-- head --> */}
                     <thead>

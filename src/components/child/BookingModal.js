@@ -22,7 +22,11 @@ const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
             email: user?.email
         }
         const saveBooking = async () => {
-            const { data } = await axios.post('http://localhost:5000/bookings', userInput)
+            const { data } = await axios.post('http://localhost:5000/bookings', userInput, {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('access_token')}`
+                }
+            })
             if (data.acknowledged) {
                 toast.success('Booked successfully', toastConfig)
                 refetch()
