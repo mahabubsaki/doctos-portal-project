@@ -5,11 +5,19 @@ import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ToastContext } from '../../App';
+import { loadStripe } from '@stripe/stripe-js';
 import auth from '../../firebase.init';
 import Loading from '../utilities/Loading';
 import NotFound from './NotFound';
+import {
+    Elements,
+} from '@stripe/react-stripe-js';
+import CheckoutFrom from '../child/CheckoutFrom';
+
+
 
 const Payment = () => {
+    const [stripePromise, setStripePromise] = useState(() => loadStripe('pk_test_51L1169ERhNvrJqfb95HV9RKyiSyhJkiwMPJYAf2sSsVKGTedSm0qr1heEwq7sYvOIaxWlI0DrmorUQzk40ekn3Nh00Cfe6cxc8'))
     const { toastConfig } = useContext(ToastContext)
     const navigate = useNavigate()
     const [invalidId, setInvalidId] = useState(false)
@@ -37,7 +45,7 @@ const Payment = () => {
             }
         }
     })
-    const { date, email, slot, name, treatment, price } = data?.data || {}
+    const { date, email, slot, name, treatment, price, id } = data?.data || {}
     if (invalidId) {
         return <NotFound></NotFound>
     }
@@ -45,15 +53,19 @@ const Payment = () => {
         return <Loading></Loading>
     }
     return (
-        <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content text-center">
-                <div className="max-w-md">
-                    <h1 className="text-3xl font-bold">Hello there <span className="text-projectPrimary">{name}</span></h1>
-                    <p className="py-4">You have an appointment on <span className="text-orange-500">{date}</span> at <span className="text-projectSecondary">{slot}</span> timeslot</p>
-                    <p>Treatment : {treatment}</p>
-                    <p className="py-4">Price : {price}</p>
-                    <button className="btn btn-primary">Pay Now</button>
-                </div>
+        <div className="min-h-[500px] flex items-center flex-col md:flex-row">
+            <div className="w-full sm:w-4/5 md:w-1/2 text-center">
+                <h1 className="text-3xl font-bold">Hello there <span className="text-projectPrimary">{name}</span></h1>
+                <p className="py-4 text-2xl">You have an appointment on <span className="text-orange-500">{date}</span> at <span className="text-projectSecondary">{slot}</span> timeslot</p>
+                <p className="text-2xl">Treatment : {treatment}</p>
+                <p className="py-4 text-2xl">Price : {price}</p>
+            </div>
+            <div className="w-full sm:w-4/5 md:w-1/2">
+                <Elements stripe={stripePromise}>
+                    <CheckoutFrom
+                        service={data?.data}
+                    ></CheckoutFrom>
+                </Elements>
             </div>
         </div>
     );

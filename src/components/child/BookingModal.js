@@ -13,7 +13,7 @@ const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
     const handleModalInput = (e) => {
         e.preventDefault();
         const userInput = {
-            id: treatment._id,
+            id: Math.round(Math.random() * 1000000000).toString(16),
             treatment: treatment.name,
             slot: e.target.slot.value,
             name: user?.displayName,
