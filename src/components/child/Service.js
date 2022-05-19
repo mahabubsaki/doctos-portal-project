@@ -4,7 +4,7 @@ import { ToastContext } from '../../App';
 
 const Service = ({ service, setTreatment, date }) => {
     const { toastConfig } = useContext(ToastContext)
-    const { name, slots } = service;
+    const { name, slots, price } = service;
     const handleAppointment = (service) => {
         if (!date) {
             toast.warn('Please select an date for appointment', toastConfig);
@@ -22,6 +22,7 @@ const Service = ({ service, setTreatment, date }) => {
                 <p className='text-red-500 text-sm'>All slots are filled</p>
             }
             <p className="text-sm">{slots.length} {slots.length ? "spaces" : "space"} Available</p>
+            <p className="text-sm font-bold">Price: ${price}</p>
             <label htmlFor="booking-modal" className="btn text-white bg-projectSecondary border-0 my-3" onClick={() => handleAppointment(service)} disabled={!slots.length}>Book Appointment</label>
         </div>
     );

@@ -19,6 +19,7 @@ const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
             name: user?.displayName,
             phone: e.target.phone.value,
             date: format(date, 'PP'),
+            price: treatment.price,
             email: user?.email
         }
         const saveBooking = async () => {

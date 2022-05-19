@@ -26,6 +26,7 @@ import AllUsers from './components/child/AllUsers';
 import RequireAdmin from './components/utilities/RequireAdmin';
 import AddDoctor from './components/child/AddDoctor';
 import ManageDoctor from './components/child/ManageDoctor';
+import Payment from './components/pages/Payment';
 export const ToastContext = createContext()
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -52,6 +53,11 @@ function App() {
           <Route path="appointment" element={
             <RequireAuth>
               <Appointment></Appointment>
+            </RequireAuth>
+          }></Route>
+          <Route path="payment/:serviceId" element={
+            <RequireAuth>
+              <Payment></Payment>
             </RequireAuth>
           }></Route>
           <Route path="dashboard" element={<RequireAuth><Dashboard></Dashboard></RequireAuth>}>

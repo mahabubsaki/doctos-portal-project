@@ -44,7 +44,8 @@ const MyAppointments = () => {
                             <th>Treatment</th>
                             <th>Date</th>
                             <th>Time</th>
-                            <th>Patient</th>
+                            <th>Price</th>
+                            <th className="text-center">Status</th>
                         </tr>
                     </thead>
                     <tbody>

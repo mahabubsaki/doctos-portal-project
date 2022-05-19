@@ -27,7 +27,7 @@ const Dashboard = () => {
                     {/* <!-- Sidebar content here --> */}
                     <li><CustomLink to="/dashboard">My Appointments</CustomLink></li>
                     <li><CustomLink to="/dashboard/my-reviews">My Reviews</CustomLink></li>
-                    <li><CustomLink to="/dashboard/my-history">My History</CustomLink></li>
+                    <li><CustomLink to="/dashboard/my-history">My Payment History</CustomLink></li>
                     {admin &&
                         <>
                             <li><CustomLink to="/dashboard/all-users">All Users</CustomLink></li>
