@@ -37,10 +37,11 @@ const MyHistory = () => {
     return (
         <div>
             <h1 className="text-3xl text-center">Currently you have {data?.data?.length} completed payment</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-5/6 mx-auto sm:w-auto py-4">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 py-2 gap-2">
                 {
-                    data?.data?.map(payment => <PaymentCard
+                    data?.data?.map((payment, index) => <PaymentCard
                         key={payment._id}
+                        no={index + 1}
                         payment={payment}
                     ></PaymentCard>)
                 }
